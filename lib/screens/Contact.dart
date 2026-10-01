@@ -1,3 +1,4 @@
+import 'package:demo_app/screens/New_contact.dart';
 import 'package:demo_app/screens/main_chat.dart';
 import 'package:demo_app/screens/setting.dart';
 import 'package:flutter/material.dart';
@@ -160,7 +161,10 @@ class _ContactsState extends State<Contacts> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(context, MaterialPageRoute(
+              builder: (context)=>NewContact()));
+        },
         child: Icon(Icons.add,),backgroundColor: Colors.lightBlue.shade300,
       ),
     );
