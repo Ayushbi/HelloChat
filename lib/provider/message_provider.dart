@@ -20,6 +20,8 @@ class live_msg extends StateNotifier<List<MessageModel>> {
 
   void addmsg(MessageModel message) {
     state = [...state, message];
+
+    print("LIVE LIST LENGTH = ${state.length}");
   }
 }
 

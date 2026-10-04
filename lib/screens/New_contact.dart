@@ -28,7 +28,10 @@ class _NewContactState extends State<NewContact> {
               }
             },
             itemBuilder: (context) {
-              return [PopupMenuItem(child: Text("Discard"), value: "Discard")];
+              return [
+                PopupMenuItem(child: Text("Discard"), value: "Discard"),
+                PopupMenuItem(child: Text("Contacts"), value: "Contacts"),
+              ];
             },
           ),
         ],
@@ -43,7 +46,7 @@ class _NewContactState extends State<NewContact> {
                   Icon(Icons.person),
                   SizedBox(width: 8),
                   Expanded(
-                    child: TextField(
+                    child: TextFormField(
                       decoration: InputDecoration(
                         hintText: "Name",
                         border: OutlineInputBorder(
@@ -62,7 +65,7 @@ class _NewContactState extends State<NewContact> {
                   Icon(Icons.person),
                   SizedBox(width: 8),
                   Expanded(
-                    child: TextField(
+                    child: TextFormField(
                       decoration: InputDecoration(
                         hintText: "Last name",
                         border: OutlineInputBorder(
@@ -117,7 +120,7 @@ class _NewContactState extends State<NewContact> {
 
                   Expanded(
                     flex: 3,
-                    child: TextField(
+                    child: TextFormField(
                       maxLength: 10,
                       keyboardType: TextInputType.phone,
                       decoration: InputDecoration(

@@ -11,13 +11,15 @@ class messageApi {
     Map<String, dynamic> data = jsonDecode(response.body);
 
     List<dynamic> messages = data["messages"];
+    print("MESSAGES COUNT = ${messages.length}");
 
     return messages.map((item) => MessageModel.fromJson(item)).toList();
   }
 
   Future<Map> SendMessage(String Message) async {
     var url = Uri.parse("http://10.0.2.2:8000/api/message");
-    Map<String, String> Data = {"Message": "message"};
+    Map<String, String> Data = {"message": Message, "sender_id": "1",
+      "receiver_id": "2"};
     final response = await http.post(
       url,
       headers: {

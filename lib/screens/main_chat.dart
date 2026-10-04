@@ -30,8 +30,16 @@ class _chat_boxState extends ConsumerState<chat_box> {
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    socket().connect(ref);
+  }
+
+  @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
     final MessageAsync = ref.watch(message);
     final live_msg = ref.watch(newMsg);
     final user_id = ref.watch(id).value ?? '';
@@ -54,15 +62,21 @@ class _chat_boxState extends ConsumerState<chat_box> {
                 SizedBox(height: height * 0.009),
 
                 if (showOnline)
-                 Text(
-                      "Online",
-                      style: TextStyle(fontSize: 12, color: Colors.blueGrey),
-                    ),
-
+                  Text(
+                    "Online",
+                    style: TextStyle(fontSize: 12, color: Colors.blueGrey),
+                  ),
               ],
             ),
             Text("Ayush B", style: TextStyle(fontWeight: FontWeight.bold)),
-            Icon(Icons.camera),
+            PopupMenuButton(
+              onSelected: (value) {
+                if (value == "clear") {}
+              },
+              itemBuilder: (context) {
+                return [PopupMenuItem(child: Text("Delete"), value: "Clear")];
+              },
+            ),
           ],
         ),
       ),
@@ -83,13 +97,40 @@ class _chat_boxState extends ConsumerState<chat_box> {
                             ? Alignment.centerLeft
                             : Alignment.centerRight,
                         child: Container(
+                          constraints: BoxConstraints(
+                            maxWidth: MediaQuery.of(context).size.width * 0.80,
+                          ),
+                          margin: EdgeInsets.symmetric(
+                            vertical: 4,
+                            horizontal: 10,
+                          ),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 14,
+                            vertical: 10,
+                          ),
                           decoration: BoxDecoration(
                             color: isMe ? Colors.green : Colors.white,
-                            borderRadius: BorderRadius.circular(5),
+                            borderRadius: BorderRadius.circular(18),
                           ),
-                          child: Padding(
-                            padding: EdgeInsets.all(12),
-                            child: Column(children: []),
+                          child: Stack(
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.only(right: 45, bottom: 2),
+                                child: Text(
+                                  msg.text,
+                                  style: TextStyle(fontSize: 17),
+                                ),
+                              ),
+
+                              Positioned(
+                                right: 0,
+                                bottom: 0,
+                                child: Text(
+                                  "${msg.time.hour}:${msg.time.minute.toString().padLeft(2, '0')}",
+                                  style: TextStyle(fontSize: 10),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       );
@@ -125,7 +166,7 @@ class _chat_boxState extends ConsumerState<chat_box> {
                           onPressed: () {
                             final text = msg.text.trim();
                             if (text.isNotEmpty) {
-                              socket.send(msg);
+                              socket.send(text);
                               msg.clear();
                             }
                           },

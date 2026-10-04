@@ -1,3 +1,4 @@
+import 'package:demo_app/screens/New_group.dart';
 import 'package:demo_app/screens/setting.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -142,6 +143,13 @@ class _GroupsState extends State<Groups> {
             )
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(context, MaterialPageRoute(
+              builder: (context)=>NewGroup()));
+        },
+        child: Icon(Icons.add,),backgroundColor: Colors.lightBlue.shade300,
       ),
     );
   }
