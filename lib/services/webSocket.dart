@@ -10,13 +10,14 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:http/http.dart' as http;
 
 class socket {
+
   // Initialize WebSocket
   static token() async {
     final SharedPreferences token = await SharedPreferences.getInstance();
     return token.getString("token");
   }
 
-  static Future<String?> authenticateChannel() async {
+  static Future<String?> authenticateChannel(String? Socket_Id) async {
     final myToken = await socket.token();
 
     final response = await http.post(
@@ -25,8 +26,9 @@ class socket {
         "Authorization": "Bearer $myToken",
         "Accept": "application/json",
       },
-      body: {"channel_name": "private-chat_1_2"},
+      body: {"socket_id": Socket_Id, "channel_name": "private-chat_1_2"},
     );
+
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
@@ -43,6 +45,7 @@ class socket {
   static StreamSubscription? streamSubscription;
 
   void connect(WidgetRef ref) async {
+    final completer = Completer<String>();
     // connection
     try {
       if (connected) {
@@ -52,20 +55,18 @@ class socket {
       channel = WebSocketChannel.connect(
         Uri.parse("ws://10.0.2.2:8080/app/cf8aii4udv5svkvy8uei"),
       );
-      final auth = await socket.authenticateChannel();
-      channel.sink.add(
-        jsonEncode({
-          "event": "pusher:subscribe",
-          "data": {"channel": "private-chat_1_2", "auth": auth},
-        }),
-      );
-      print("SUBSCRIBE SENT");
       connected = true;
 
       streamSubscription = channel.stream.listen(
         (event) {
+          print("RAW SOCKET EVENT: $event");
           final data = jsonDecode(event);
+          if (data['event'] == "pusher:connection_established") {
+            final connection_info = jsonDecode(data['data']);
+            final socket_id = connection_info["socket_id"];
+            completer.complete(socket_id);
 
+          }
           if (data["event"] == "App\\Events\\MsgSent") {
             final eventData = jsonDecode(data["data"]);
 
@@ -88,6 +89,15 @@ class socket {
           connect(ref);
         },
       );
+      final completer_Id=await completer.future;
+      final auth = await socket.authenticateChannel(completer_Id);
+      channel.sink.add(
+        jsonEncode({
+          "event": "pusher:subscribe",
+          "data": {"channel": "private-chat_1_2", "auth": auth},
+        }),
+      );
+      print("SUBSCRIBE SENT");
     } catch (e) {
       print(e);
     }
@@ -97,6 +107,7 @@ class socket {
   static send(messages) async {
     try {
       await messageApi().SendMessage(messages);
+  
     } catch (e) {
       print(e);
     }

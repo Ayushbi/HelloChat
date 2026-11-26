@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:demo_app/provider/theme_provider.dart';
-import 'package:demo_app/screens/auth.dart';
+import 'package:demo_app/authentication/auth.dart';
 import 'package:demo_app/screens/feedback.dart';
 import 'package:demo_app/screens/login.dart';
 import 'package:demo_app/services/Profile.dart';

@@ -1,10 +1,8 @@
-import 'package:demo_app/screens/chat_section.dart';
-import 'package:demo_app/screens/login.dart';
-import 'package:demo_app/screens/main_chat.dart';
+import 'package:demo_app/screens/navigation.dart';
 import 'package:demo_app/screens/register.dart';
-import 'package:demo_app/screens/splash.dart';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
+
 import 'package:demo_app/provider/theme_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -47,7 +45,7 @@ class _demoState extends ConsumerState<demo> {
 
       debugShowCheckedModeBanner: false,
       // home: checklogin ? ChatSection() : login(),
-      home: ChatSection(),
+      home: register(),
     );
   }
 }

@@ -1,20 +1,21 @@
-import 'package:demo_app/screens/Contact.dart';
 import 'package:demo_app/screens/Groups.dart';
-import 'package:demo_app/screens/main_chat.dart';
+import 'package:demo_app/screens/chatScreen.dart';
+
 import 'package:demo_app/screens/setting.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class ChatSection extends StatefulWidget {
-  const ChatSection({super.key});
+class Navigation extends StatefulWidget {
+  const Navigation({super.key});
 
   @override
-  State<ChatSection> createState() => _ChatSectionState();
+  State<Navigation> createState() => _ChatSectionState();
 }
 
-class _ChatSectionState extends State<ChatSection> {
+class _ChatSectionState extends State<Navigation> {
   int index = 0;
-  List<Widget> pages = [Contacts(),  Groups(),Setting(),];
+  List<Widget> pages = [users(), Groups(), Setting()];
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +30,6 @@ class _ChatSectionState extends State<ChatSection> {
           setState(() {
             index = item;
           });
-
         },
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "home"),

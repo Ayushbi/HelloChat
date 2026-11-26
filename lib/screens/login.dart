@@ -1,12 +1,10 @@
-import 'package:demo_app/screens/auth_login.dart';
-import 'package:demo_app/screens/chat_section.dart';
-import 'package:demo_app/main.dart';
-import 'package:demo_app/screens/main_chat.dart';
+import 'package:demo_app/authentication/auth_login.dart';
+
+import 'package:demo_app/screens/navigation.dart';
 import 'package:demo_app/screens/register.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/gestures.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 class login extends StatefulWidget {
@@ -19,7 +17,8 @@ class login extends StatefulWidget {
 class _loginState extends State<login> {
   final _formkey = GlobalKey<FormState>();
   final password = TextEditingController();
-  final username=TextEditingController();
+  final username = TextEditingController();
+
   @override
   void dispose() {
     username.dispose();
@@ -64,7 +63,7 @@ class _loginState extends State<login> {
                   SizedBox(height: media.height * 0.03),
 
                   TextFormField(
-                  controller: username,
+                    controller: username,
                     decoration: InputDecoration(
                       label: Text("Name"),
                       border: OutlineInputBorder(
@@ -94,32 +93,12 @@ class _loginState extends State<login> {
                       if (value == null || value.isEmpty) {
                         return "Enter password";
                       }
-                      return null ;
+                      return null;
                     },
                   ),
 
                   SizedBox(height: media.height * 0.02),
 
-                  TextFormField(
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      label: Text("Confirm Password"),
-
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12.0),
-                      ),
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "Enter password ";
-                      }
-                      if (value != password.text) {
-                        return " password mismatched ";
-                      }
-
-                      return null;
-                    },
-                  ),
                   SizedBox(height: media.height * 0.01),
 
                   SizedBox(
@@ -127,18 +106,31 @@ class _loginState extends State<login> {
                     child: ElevatedButton(
                       onPressed: () async {
                         if (_formkey.currentState!.validate()) {
-                          var data=await Login.login_user(username.text, password.text);
-                          if(data['success']==true) {
-                            SharedPreferences login_token = await SharedPreferences
-                                .getInstance();
+                          var data = await Login.login_user(
+                            username.text,
+                            password.text,
+                          );
+                          if (data['success'] == true) {
+                            SharedPreferences login_token =
+                                await SharedPreferences.getInstance();
                             await login_token.setString("token", data['token']);
-                            await login_token.setString("id", data['user_id'].toString());
-                          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>ChatSection()),
-                              (route)=>false);
-
-                      }else{
+                            await login_token.setString(
+                              "id",
+                              data['user_id'].toString(),
+                            );
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => Navigation(),
+                              ),
+                              (route) => false,
+                            );
+                          } else {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text(data['error']??"login failed",),duration: Duration(seconds: 1),)
+                              SnackBar(
+                                content: Text(data['error'] ?? "login failed"),
+                                duration: Duration(seconds: 1),
+                              ),
                             );
                           }
                         }

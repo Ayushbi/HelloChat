@@ -1,4 +1,5 @@
-import 'package:demo_app/screens/chat_section.dart';
+
+import 'package:demo_app/screens/navigation.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 class splashscreen extends StatefulWidget {
@@ -16,7 +17,7 @@ void initState() {
  Timer(Duration(seconds: 3), (){
    if(!mounted) return;
 Navigator.pushReplacement(context, MaterialPageRoute(
-    builder: (context)=>ChatSection()));
+    builder: (context)=>Navigation()));
  });
   }
   @override
